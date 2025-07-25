@@ -1,0 +1,11 @@
+[project]
+name = "clipper"
+version = "0.1.0"
+description = "A creative orchestration of Amazon Q and Algolia MCP to keep and search your read-later links."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "lxml[html-clean]>=6.0.0",
+    "mcp[cli]>=1.12.2",
+    "newspaper4k>=0.9.3.1",
+]

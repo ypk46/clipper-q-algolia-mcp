@@ -35,14 +35,47 @@ Clipper is a creative CLI agent that leverages Amazon Q’s orchestration capabi
 
 ## Key Features
 
-- **LLM-Orchestrated Enrichment:**  
-  Amazon Q uses the provided instructions to coordinate MCP tools and enrich each link with summaries and keywords.
-- **Algolia MCP Integration:**  
-  All entries are indexed in Algolia, enabling fast and flexible search.
-- **CLI Simplicity:**  
-  The workflow is fully automated via the CLI, requiring minimal user input.
-- **Extensible Design:**  
-  Easily add new enrichment or search tools by updating the MCP toolset or instructions.
+- Amazon Q uses the provided instructions to coordinate MCP tools and enrich each link with summaries and keywords.
+- All entries are indexed in Algolia, enabling fast and flexible search.
+- The workflow is fully automated via the CLI, requiring minimal user input.
+- Easily add new enrichment or search tools by updating the MCP toolset or instructions.
+
+## MCP Server Setup for Amazon Q
+
+To enable Amazon Q to orchestrate MCP tools, you need to set up MCP servers locally and configure them in your Amazon Q environment. This requires:
+
+- The Algolia MCP repository (`mcp-node`) cloned and available locally.
+- The Clipper MCP (this repo) available locally.
+- The `uv` tool installed for running the Clipper MCP Python server.
+
+Add the following configuration to your `~/.aws/amazonq/mcp.json` file:
+
+```json
+{
+  "mcpServers": {
+    "algolia_mcp": {
+      "command": "node",
+      "args": [
+        "--experimental-strip-types",
+        "--no-warnings=ExperimentalWarning",
+        "<Path to Algolia MCP repo>/src/app.ts"
+      ]
+    },
+    "clipper_mcp": {
+      "command": "uv", // You may need to use the absolute path for uv (use `which uv` to get it)
+      "args": ["--directory", "<Path to this repo locally>", "run", "main.py"]
+    }
+  }
+}
+```
+
+**Note:**
+
+- Make sure the paths in the JSON match your local setup.
+- You must have `uv` installed (see https://github.com/astral-sh/uv).
+- The Algolia MCP server requires Node.js and the `mcp-node` repo (see https://github.com/algolia/mcp-node).
+
+---
 
 ## Usage
 
